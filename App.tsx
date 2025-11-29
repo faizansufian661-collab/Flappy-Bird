@@ -60,6 +60,17 @@ function Scene() {
   );
 }
 
+function Loader() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center bg-black text-white z-[200]">
+        <div className="text-center">
+            <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <h2 className="text-2xl font-cyber tracking-widest text-orange-500">SYSTEM LOADING...</h2>
+        </div>
+    </div>
+  );
+}
+
 function App() {
   const { quality } = useStore();
   
@@ -67,25 +78,25 @@ function App() {
   const dpr = quality === 'HIGH' ? [1, 1.5] : [0.5, 1];
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative', background: '#000' }}>
-      <HUD />
-      <Canvas
-        shadows
-        dpr={dpr as any} 
-        gl={{ 
-            antialias: false, 
-            stencil: false, 
-            depth: true, 
-            powerPreference: "high-performance" 
-        }}
-        camera={{ position: [0, 5.5, 8], fov: 60 }}
-        style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
-      >
-        <CameraController />
-        <Suspense fallback={null}>
-            <Scene />
-        </Suspense>
-      </Canvas>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', background: '#000', overflow: 'hidden' }}>
+      <Suspense fallback={<Loader />}>
+        <HUD />
+        <Canvas
+          shadows
+          dpr={dpr as any} 
+          gl={{ 
+              antialias: false, 
+              stencil: false, 
+              depth: true, 
+              powerPreference: "high-performance" 
+          }}
+          camera={{ position: [0, 5.5, 8], fov: 60 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+        >
+          <CameraController />
+          <Scene />
+        </Canvas>
+      </Suspense>
     </div>
   );
 }
